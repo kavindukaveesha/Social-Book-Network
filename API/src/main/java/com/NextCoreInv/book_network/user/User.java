@@ -4,6 +4,7 @@ import com.NextCoreInv.book_network.role.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,21 +18,23 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static jakarta.persistence.FetchType.EAGER;
+
 /**
  * Entity representing the user in the system.
  * Implements UserDetails for Spring Security and Principal for general identity representation.
  */
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "_user") // Table name
+@Table(name = "_user")
 public class User implements UserDetails, Principal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Use IDENTITY for auto-increment primary keys
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String firstname;
@@ -50,12 +53,7 @@ public class User implements UserDetails, Principal {
 
     private boolean enabled;
 
-    @ManyToMany(fetch = FetchType.EAGER) // Eager loading for roles
-//    @JoinTable(
-//            name = "user_roles", // Join table for User and Role entities
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id")
-//    )
+    @ManyToMany(fetch = EAGER)
     @JsonIgnore // Prevent roles from being serialized directly
     private List<Role> roles;
 
@@ -66,6 +64,18 @@ public class User implements UserDetails, Principal {
     @LastModifiedDate
     @Column(insertable = false) // Automatically updated modification date
     private LocalDateTime updatedDate;
+
+    /**
+     * Returns the roles of the user as a collection of granted authorities.
+     *
+     * @return Collection of GrantedAuthority objects.
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(r -> new SimpleGrantedAuthority(r.getName()))
+                .collect(Collectors.toList());
+    }
 
     /**
      * Returns the full name of the user.
@@ -84,18 +94,6 @@ public class User implements UserDetails, Principal {
     @Override
     public String getName() {
         return email;
-    }
-
-    /**
-     * Returns the roles of the user as a collection of granted authorities.
-     *
-     * @return Collection of GrantedAuthority objects.
-     */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName())) // Convert roles to GrantedAuthority
-                .collect(Collectors.toList());
     }
 
     /**

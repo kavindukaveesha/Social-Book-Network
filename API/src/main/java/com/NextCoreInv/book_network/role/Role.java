@@ -4,10 +4,9 @@ import com.NextCoreInv.book_network.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.annotation.LastModifiedDate; // Fixing incorrect annotation
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,25 +16,24 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "role")
+@EntityListeners(AuditingEntityListener.class)
 public class Role {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Specify ID generation strategy
     private Integer id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false) // Role name should be unique and not null
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles") // Mapped by the "roles" field in User class
     private List<User> users;
 
-
-
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false) // Automatically populate createdDate
     private LocalDateTime createdDate;
 
-    @LastModifiedBy
-    @Column(insertable = false)
+    @LastModifiedDate
+    @Column(insertable = false) // Automatically update modifiedDate
     private LocalDateTime updatedDate;
-
 }

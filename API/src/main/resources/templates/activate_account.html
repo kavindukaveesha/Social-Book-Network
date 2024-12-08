@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate Your Account</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header {
+            background-color: #007bff;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .activation-code {
+            font-size: 28px;
+            color: #007bff;
+            margin: 20px 0;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .activation-link a {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 12px 25px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .activation-link a:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Activate Your Account</h1>
+    </div>
+    <div class="content">
+        <p class="greeting" th:text="'Hello ' + ${username} + ','"></p>
+        <p>We’re excited to have you on board! To start using your account, please activate it by entering the code below or clicking the activation link.</p>
+        <div class="activation-code">
+            <span th:text="${activation_code}"></span>
+        </div>
+        <div class="activation-link">
+            <a th:href="${confirmationUrl}" target="_blank">Activate My Account</a>
+        </div>
+        <p>If you didn’t request this, please ignore this email or contact our support team.</p>
+    </div>
+    <div class="footer">
+        <p>Need help? <a href="mailto:support@example.com">Contact Support</a></p>
+        <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+    </div>
+</div>
+</body>
+</html>
