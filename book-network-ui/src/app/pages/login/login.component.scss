@@ -1,0 +1,45 @@
+
+.login-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.login-card {
+  background: white;
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.image-section {
+  min-height: 100%;
+  position: relative;
+  color: white;
+  padding: 3rem;
+  background-image: linear-gradient(45deg, rgba(13, 110, 253, 0.9), rgba(13, 202, 240, 0.9)), url('/assets/login.jpeg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.image-content {
+  position: relative;
+  z-index: 1;
+}
+
+.form-section {
+  padding: 3rem;
+}
+
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+@media (max-width: 768px) {
+  .image-section {
+    min-height: 200px;
+  }
+}
+

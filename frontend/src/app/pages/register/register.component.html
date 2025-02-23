@@ -1,0 +1,109 @@
+<!-- register.component.html -->
+<div class="container-fluid p-0">
+  <div class="row g-0 min-vh-100">
+    <!-- Left Image Section -->
+    <div class="col-lg-6 d-none d-lg-block">
+      <div class="bg-image h-100">
+        <img [src]="ImagePaths.REGISTER_HERO" class="w-100 h-100 object-fit-cover" alt="Register">
+      </div>
+    </div>
+
+    <!-- Right Form Section -->
+    <div class="col-lg-6 bg-white">
+      <div class="login-wrapper p-lg-5 p-4 h-100 d-flex align-items-center">
+        <div class="w-100 max-width-400 mx-auto">
+          <div class="text-center mb-4">
+            <h2 class="fw-bold mb-1">Create Account</h2>
+            <p class="text-muted">Sign up to get started</p>
+          </div>
+
+          <!-- Social Login -->
+          <div class="mb-4">
+            <button class="btn btn-outline-dark w-100 mb-3" [disabled]="isSubmitting">
+              <i class="fab fa-google me-2"></i>Continue with Google
+            </button>
+            <button class="btn btn-outline-dark w-100" [disabled]="isSubmitting">
+              <i class="fab fa-apple me-2"></i>Continue with Apple
+            </button>
+          </div>
+
+          <div class="divider text-muted my-4">
+            <span class="divider-text bg-white px-3">or</span>
+          </div>
+
+          <!-- Registration Form -->
+          <form [formGroup]="registerForm" (ngSubmit)="register()">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="firstname"
+                  [ngClass]="{'is-invalid': registerForm.get('firstname')?.invalid && registerForm.get('firstname')?.touched}">
+                <div class="invalid-feedback" *ngIf="registerForm.get('firstname')?.errors?.['required']">
+                  First name is required
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="lastname"
+                  [ngClass]="{'is-invalid': registerForm.get('lastname')?.invalid && registerForm.get('lastname')?.touched}">
+                <div class="invalid-feedback" *ngIf="registerForm.get('lastname')?.errors?.['required']">
+                  Last name is required
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email address</label>
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email"
+                [ngClass]="{'is-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}">
+              <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['required']">
+                Email is required
+              </div>
+              <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['email']">
+                Please enter a valid email
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                formControlName="password"
+                [ngClass]="{'is-invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}">
+              <div class="invalid-feedback" *ngIf="registerForm.get('password')?.errors?.['required']">
+                Password is required
+              </div>
+              <div class="invalid-feedback" *ngIf="registerForm.get('password')?.errors?.['minlength']">
+                Password must be at least 6 characters
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100 mb-3"
+              [disabled]="registerForm.invalid || isSubmitting">
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+              {{ isSubmitting ? 'Creating Account...' : 'Sign up' }}
+            </button>
+
+            <p class="text-center mb-0">
+              Already have an account?
+              <a href="/auth/login" class="text-decoration-none" (click)="login()">Sign in</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

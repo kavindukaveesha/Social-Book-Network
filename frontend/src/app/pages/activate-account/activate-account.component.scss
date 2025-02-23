@@ -1,0 +1,29 @@
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0056b3, #003580);
+}
+
+.verification-input {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 6px;
+}
+
+.text-primary {
+  color: #007bff !important;
+}
+
+.btn-link {
+  cursor: pointer;
+}

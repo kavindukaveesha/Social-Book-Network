@@ -1,0 +1,57 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card shadow-lg border-0 rounded-4 p-4 w-100" style="max-width: 450px;">
+    <div class="card-body">
+      <div class="text-center mb-4">
+        <h2 class="fw-bold">Activate Your Account</h2>
+        <p class="text-muted">Enter the 6-digit code sent to your email</p>
+        <p class="text-primary fw-semibold">{{ email }}</p>
+      </div>
+
+      <!-- Verification Code Form -->
+      <form [formGroup]="activationForm" (ngSubmit)="activateAccount()">
+        <div class="mb-4">
+          <div class="d-flex justify-content-between gap-2">
+            <ng-container *ngFor="let i of [0,1,2,3,4,5]">
+              <input
+                type="text"
+                class="form-control text-center fw-bold fs-4 border border-primary-subtle shadow-sm"
+                maxlength="1"
+                [formControlName]="'digit' + i"
+                (keyup)="onCodeChange($event, i)"
+                (paste)="handlePaste($event)"
+                [ngClass]="{'is-invalid': isDigitInvalid(i)}"
+                style="width: 50px; height: 55px;"
+              >
+            </ng-container>
+          </div>
+          <div class="invalid-feedback text-center mt-2" *ngIf="showError">
+            Please enter a valid verification code.
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary w-100 py-2 rounded-pill shadow-sm"
+          [disabled]="!activationForm.valid || isSubmitting">
+          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+          {{ isSubmitting ? 'Activating...' : 'Activate Account' }}
+        </button>
+      </form>
+
+      <div class="text-center mt-3">
+        <p class="mb-2">
+          Didn't receive the code?
+          <button
+            class="btn btn-link p-0 text-primary fw-semibold"
+            (click)="resendCode()"
+            [disabled]="resendTimer > 0">
+            {{ resendTimer > 0 ? 'Resend in ' + resendTimer + 's' : 'Resend' }}
+          </button>
+        </p>
+        <a routerLink="/login" class="text-decoration-none text-muted fw-semibold">
+          Back to login
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,4 @@
+// SecurityConfig.java
 package com.NextCoreInv.book_network.security;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * Security configuration class for Spring Security setup.
+ * Primary security configuration class that defines the security rules
+ * and configurations for the application.
  */
 @Configuration
 @EnableWebSecurity
@@ -22,48 +24,61 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
-    private final JwtFilter jwtAuthFilter; // JWT filter for token-based authentication
-    private final AuthenticationProvider authenticationProvider; // Custom authentication provider
+    // Required dependencies injected through constructor
+    private final JwtFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
 
     /**
-     * Configures the SecurityFilterChain, defining authentication and authorization settings.
+     * Configures the main security filter chain for the application.
+     * This defines security rules, CORS, CSRF, session management,
+     * and authentication requirements.
      *
-     * @param http The HttpSecurity object for configuration.
-     * @return The configured SecurityFilterChain bean.
-     * @throws Exception if an error occurs during configuration.
+     * @param http HttpSecurity instance to be configured
+     * @return Configured SecurityFilterChain
+     * @throws Exception if configuration fails
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Cross-Origin Resource Sharing (CORS) configuration
+                // Use default CORS configuration from corsFilter bean
                 .cors(Customizer.withDefaults())
-                // Disables CSRF (not required for stateless APIs)
+
+                // Disable CSRF as we're using JWT
                 .csrf(AbstractHttpConfigurer::disable)
-                // Configures request authorization rules
+
+                // Configure authorization rules
                 .authorizeHttpRequests(req -> req
-                        // Permit all requests to specific public endpoints
+                        // Public endpoints that don't require authentication
                         .requestMatchers(
                                 "/auth/**",                // Authentication endpoints
-                                "/v2/api-docs",            // Swagger v2 documentation
-                                "/v3/api-docs",            // Swagger v3 documentation
-                                "/v3/api-docs/**",         // Swagger v3 extended paths
+                                "/v2/api-docs",            // Swagger v2
+                                "/v3/api-docs",            // Swagger v3
+                                "/v3/api-docs/**",         // Swagger v3 extensions
                                 "/swagger-resources",      // Swagger resources
                                 "/swagger-resources/**",   // Swagger resource extensions
-                                "/configuration/ui",       // Swagger UI configuration
-                                "/configuration/security", // Swagger security configuration
-                                "/swagger-ui/**",          // Swagger UI files
-                                "/webjars/**",             // Webjars (e.g., static assets)
-                                "/swagger-ui.html"         // Swagger UI main HTML
-                        ).permitAll() // Allow unauthenticated access
-                        .anyRequest().authenticated() // All other requests require authentication
+                                "/configuration/ui",       // Swagger UI config
+                                "/configuration/security", // Swagger security config
+                                "/swagger-ui/**",          // Swagger UI
+                                "/webjars/**",            // Web JARs
+                                "/swagger-ui.html",        // Swagger UI HTML
+                                "/error"                   // Error handling
+                        ).permitAll()
+                        // All other requests need authentication
+                        .anyRequest().authenticated()
                 )
-                // Configures session management as stateless (no server-side sessions)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Sets the custom authentication provider
+
+                // Configure session management as stateless
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // Set authentication provider
                 .authenticationProvider(authenticationProvider)
-                // Adds the JWT filter before the UsernamePasswordAuthenticationFilter
+
+                // Add JWT filter before username/password authentication
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build(); // Builds and returns the configured SecurityFilterChain
+        return http.build();
     }
 }
+
