@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit {
         //success message
         this.toastr.success('Login successful');
 
-        this.router.navigate(['/books']);
+        this.router.navigate(['']);
       },
       error: (error) => {
         this.isSubmitting = false;

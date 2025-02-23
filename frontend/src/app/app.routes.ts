@@ -16,4 +16,8 @@ export const routes: Routes = [
     path: 'auth/activate-account/:email',
     component: ActivateAccountComponent
   },
+  {
+    path: '',
+    loadChildren: () => import('./modules/book/book.module').then(m => m.BookModule),
+  }
 ];

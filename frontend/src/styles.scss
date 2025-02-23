@@ -2,3 +2,65 @@
 @use "bootstrap/dist/css/bootstrap.min.css";
 @use "@fortawesome/fontawesome-free/css/all.min.css";
 @use 'ngx-toastr/toastr' as toastr;
+
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif; /* Modern, clean font */
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Root Variables */
+:root {
+  --primary-blue: #0066cc;
+  --dark-blue: #1a237e;
+  --light-blue: #e3f2fd;
+  --gradient-blue: linear-gradient(45deg, var(--primary-blue), #00c6ff);
+  --gradient-dark: linear-gradient(45deg, var(--dark-blue), var(--primary-blue));
+}
+
+/* Utility Classes */
+.bg-blur {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.hover-lift {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Bootstrap Overrides */
+.btn-light-blur {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+}
+
+.btn-light-blur:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: white;
+  color: white;
+}
+
+.bg-gradient-dark {
+  background: var(--gradient-dark);
+}
+
+.card {
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
