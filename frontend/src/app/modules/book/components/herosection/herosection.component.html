@@ -1,0 +1,127 @@
+<!-- hero.component.html -->
+<section class="hero position-relative min-vh-100 d-flex align-items-center bg-light" style="margin-top: 72px;">
+
+  <div class="container position-relative z-2">
+    <div class="row align-items-center gy-5">
+      <!-- Content Column -->
+      <div class="col-lg-6">
+        <!-- Badge -->
+        <div class="mb-4">
+          <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-4 py-2 fs-6">
+            <i class="bi bi-stars me-2"></i>
+            <span class="fw-medium">AI-Powered Recommendations</span>
+          </span>
+        </div>
+
+        <!-- Heading -->
+        <h1 class="display-3 fw-bold mb-4 lh-1">
+          Discover Your Next
+          <span class="d-block mt-2 text-gradient">Great Read</span>
+        </h1>
+
+        <!-- Description -->
+        <p class="lead text-secondary mb-4 fw-normal">
+          Explore a vast collection of books, connect with fellow readers, and embark on your next literary adventure.
+        </p>
+
+        <!-- Features List -->
+        <ul class="list-unstyled text-secondary mb-5">
+          <li class="mb-3 d-flex align-items-center">
+            <span class="feature-icon me-3 bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
+              <i class="bi bi-check-lg"></i>
+            </span>
+            Personalized book suggestions based on your interests
+          </li>
+          <li class="mb-3 d-flex align-items-center">
+            <span class="feature-icon me-3 bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
+              <i class="bi bi-check-lg"></i>
+            </span>
+            Thousands of curated book reviews from readers
+          </li>
+          <li class="d-flex align-items-center">
+            <span class="feature-icon me-3 bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
+              <i class="bi bi-check-lg"></i>
+            </span>
+            Join a thriving community of passionate readers
+          </li>
+        </ul>
+
+        <!-- Action Buttons -->
+        <div class="d-flex flex-wrap gap-3">
+          <button class="btn btn-primary btn-lg action-btn">
+            <span class="btn-content">
+              <i class="bi bi-book-half"></i>
+              <span>Start Reading</span>
+            </span>
+          </button>
+          <button class="btn btn-outline-dark btn-lg action-btn">
+            <span class="btn-content">
+              <i class="bi bi-play-circle-fill"></i>
+              <span>Watch Demo</span>
+            </span>
+          </button>
+        </div>
+
+        <!-- Social Proof -->
+        <div class="mt-5 pt-3 d-flex align-items-center gap-4">
+          <div class="d-flex align-items-center">
+            <div class="avatar-group">
+              <img src="/api/placeholder/32/32" class="avatar" alt="User">
+              <img src="/api/placeholder/32/32" class="avatar" alt="User">
+              <img src="/api/placeholder/32/32" class="avatar" alt="User">
+            </div>
+            <div class="ms-3">
+              <p class="mb-0 fw-medium">50k+ Readers</p>
+              <small class="text-secondary">Have joined us</small>
+            </div>
+          </div>
+          <div class="vr opacity-25 d-none d-sm-block"></div>
+          <div class="d-none d-sm-flex align-items-center text-warning">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <span class="ms-2 text-secondary">
+              <strong>4.9/5</strong> ratings
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Column -->
+      <div class="col-lg-6 d-none d-lg-block">
+        <div class="position-relative">
+          <!-- Carousel -->
+          <div id="bookCarousel" class="carousel slide carousel-fade shadow-lg rounded-4 overflow-hidden" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#bookCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+              <button type="button" data-bs-target="#bookCarousel" data-bs-slide-to="1"></button>
+              <button type="button" data-bs-target="#bookCarousel" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="assets/books/book6.jpg" class="d-block w-100 rounded-4" alt="Book 1">
+              </div>
+              <div class="carousel-item">
+                <img src="assets/books/book2.jpg" class="d-block w-100 rounded-4" alt="Book 2">
+              </div>
+              <div class="carousel-item">
+                <img src="assets/books/book3.jpg" class="d-block w-100 rounded-4" alt="Book 3">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#bookCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#bookCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

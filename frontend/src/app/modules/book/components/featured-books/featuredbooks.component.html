@@ -1,0 +1,291 @@
+<!-- featured-books.component.html -->
+<section class="featured-books py-5">
+  <div class="container">
+    <!-- Header Section -->
+    <div class="header-section mb-5">
+      <!-- Top Header -->
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div class="section-intro">
+          <div class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 mb-2">
+            <i class="bi bi-stars me-1"></i>
+            Featured Collection
+          </div>
+          <h2 class="section-title h1 mb-2">Featured Books</h2>
+          <p class="section-subtitle text-muted">Discover our handpicked selection just for you</p>
+        </div>
+
+        <!-- Category Filter Buttons -->
+        <div class="category-filters d-flex gap-2 align-items-center flex-wrap">
+          <div class="btn-group">
+            <button *ngFor="let category of categories"
+                    (click)="filterByCategory(category.value)"
+                    class="btn"
+                    [class.btn-primary]="selectedCategory === category.value"
+                    [class.btn-outline-primary]="selectedCategory !== category.value">
+              {{ category.label }}
+            </button>
+          </div>
+          <a routerLink="/books" class="btn btn-link text-decoration-none">
+            View All
+            <i class="bi bi-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Books Grid -->
+    <div class="row g-4">
+      <!-- Book Card -->
+      <div class="col-12 col-sm-6 col-lg-3" *ngFor="let book of filteredBooks">
+        <div class="book-card card h-100 border-0 shadow-sm rounded-4 position-relative">
+          <!-- Ribbon for New/Bestseller -->
+          <div class="ribbon position-absolute" *ngIf="book.isNew || book.isBestseller">
+            <span class="badge" [class]="book.isNew ? 'bg-success' : 'bg-primary'">
+              {{ book.isNew ? 'New' : 'Bestseller' }}
+            </span>
+          </div>
+
+          <!-- Book Cover -->
+          <div class="book-cover position-relative overflow-hidden rounded-top-4">
+            <img [src]="book.coverImage"
+                 [alt]="book.title"
+                 class="card-img-top"
+                 style="aspect-ratio: 2/3; object-fit: cover;">
+
+            <!-- Quick Action Buttons -->
+            <div class="quick-actions position-absolute w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center">
+              <div class="action-buttons d-flex gap-2">
+                <button class="btn btn-light rounded-circle"
+                        (click)="toggleWishlist(book)"
+                        [class.text-danger]="book.isWishlisted">
+                  <i class="bi" [class]="book.isWishlisted ? 'bi-heart-fill' : 'bi-heart'"></i>
+                </button>
+                <button class="btn btn-light rounded-circle"
+                        (click)="showQuickView(book)">
+                  <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn btn-light rounded-circle"
+                        (click)="shareBook(book)">
+                  <i class="bi bi-share"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="book-tags position-absolute top-0 start-0 m-3">
+              <span *ngFor="let tag of book.tags.slice(0, 2)"
+                    class="badge bg-light text-dark me-1">
+                {{ tag }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Book Details -->
+          <div class="card-body p-4">
+            <!-- Author -->
+            <p class="book-author text-muted mb-1">by {{ book.author }}</p>
+
+            <!-- Title -->
+            <h3 class="book-title h5 mb-2">
+              <a [routerLink]="['/books', book.id]" class="text-decoration-none text-dark">
+                {{ book.title }}
+              </a>
+            </h3>
+
+            <!-- Rating -->
+            <div class="book-rating d-flex align-items-center gap-2 mb-3">
+              <div class="stars">
+                <i *ngFor="let star of [1,2,3,4,5]"
+                   class="bi"
+                   [class.bi-star-fill]="star <= book.rating"
+                   [class.bi-star]="star > book.rating"
+                   [style.color]="star <= book.rating ? '#ffc107' : '#dee2e6'">
+                </i>
+              </div>
+              <span class="rating-count text-muted small">
+                ({{ book.reviewCount | number }})
+              </span>
+            </div>
+
+            <!-- Price & Action -->
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="price-block">
+                <span class="current-price h5 mb-0 text-primary fw-bold">
+                  {{ book.price | currency }}
+                </span>
+                <span class="original-price text-decoration-line-through text-muted ms-2"
+                      *ngIf="book.originalPrice">
+                  {{ book.originalPrice | currency }}
+                </span>
+              </div>
+              <button class="btn btn-primary btn-sm rounded-pill px-3"
+                      (click)="addToCart(book)"
+                      [disabled]="!book.inStock">
+                <i class="bi bi-cart-plus me-1"></i>
+                {{ book.inStock ? 'Add' : 'Out of Stock' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load More Button -->
+    <div class="text-center mt-5">
+      <button class="btn btn-outline-primary btn-lg rounded-pill px-5"
+              (click)="loadMore()"
+              [disabled]="loading || noMoreBooks">
+        <span *ngIf="!loading">
+          Load More Books
+          <i class="bi bi-arrow-down ms-2"></i>
+        </span>
+        <span *ngIf="loading" class="d-flex align-items-center">
+          <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+          Loading...
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Quick View Modal -->
+<div class="modal fade" id="quickViewModal" tabindex="-1" *ngIf="selectedBook">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0">
+      <div class="modal-header border-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="row">
+          <!-- Book Cover -->
+          <div class="col-md-5">
+            <img [src]="selectedBook.coverImage"
+                 [alt]="selectedBook.title"
+                 class="img-fluid rounded-4">
+          </div>
+          <!-- Book Details -->
+          <div class="col-md-7">
+            <h2 class="h3 mb-2">{{ selectedBook.title }}</h2>
+            <p class="text-muted mb-3">by {{ selectedBook.author }}</p>
+            <div class="mb-4">
+              {{ selectedBook.description }}
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="price-block">
+                <span class="h4 mb-0 text-primary fw-bold">
+                  {{ selectedBook.price | currency }}
+                </span>
+              </div>
+              <button class="btn btn-primary rounded-pill px-4"
+                      (click)="addToCart(selectedBook)">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add these styles to your component's CSS file -->
+<style>
+  .featured-books {
+    background: linear-gradient(to bottom, rgba(var(--bs-primary-rgb), 0.03), transparent);
+  }
+
+  .book-card {
+    transition: all 0.3s ease;
+  }
+
+  .book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .book-cover {
+    overflow: hidden;
+  }
+
+  .book-cover img {
+    transition: transform 0.5s ease;
+  }
+
+  .book-card:hover .book-cover img {
+    transform: scale(1.05);
+  }
+
+  .quick-actions {
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  .book-card:hover .quick-actions {
+    opacity: 1;
+  }
+
+  .action-buttons .btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .action-buttons .btn:hover {
+    transform: scale(1.1);
+  }
+
+  .ribbon {
+    top: 1rem;
+    right: -1rem;
+    z-index: 1;
+  }
+
+  .ribbon .badge {
+    padding: 0.5rem 1rem;
+  }
+
+  .book-title a:hover {
+    color: var(--bs-primary) !important;
+  }
+
+  .stars {
+    color: #ffc107;
+  }
+
+  /* Loading Animation */
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .loading .book-card {
+    animation: pulse 1.5s infinite;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 767.98px) {
+    .quick-actions {
+      opacity: 1;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    }
+
+    .book-card:hover {
+      transform: none;
+    }
+
+    .section-intro {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .category-filters {
+      justify-content: center;
+    }
+  }
+</style>

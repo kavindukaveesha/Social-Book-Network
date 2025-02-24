@@ -2,6 +2,7 @@
 @use "bootstrap/dist/css/bootstrap.min.css";
 @use "@fortawesome/fontawesome-free/css/all.min.css";
 @use 'ngx-toastr/toastr' as toastr;
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
 
 /* Reset and Base Styles */
 * {
@@ -64,3 +65,6 @@ body {
 .card:hover {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

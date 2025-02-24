@@ -1,0 +1,159 @@
+<!-- user-reviews.component.html -->
+<section class="reviews-section py-5">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 mb-2">
+          <i class="bi bi-chat-quote me-2"></i>Reviews
+        </span>
+        <h2 class="display-6 fw-bold mb-2">Community Reviews</h2>
+        <p class="text-muted mb-0">{{ reviews.length }} reviews from our community</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4" (click)="toggleReviewForm()" *ngIf="!showReviewForm">
+        <i class="bi bi-plus-lg me-2"></i>Add Review
+      </button>
+    </div>
+
+    <!-- Review Form - Initially Hidden -->
+    <div class="review-form mb-5" [@slideInOut]="showReviewForm">
+      <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="h4 mb-0">Write Your Review</h3>
+            <button class="btn btn-link text-muted p-0" (click)="toggleReviewForm()">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+            <div class="row g-4">
+              <!-- Rating First -->
+              <div class="col-12 text-center">
+                <div class="rating-wrapper">
+                  <p class="rating-label mb-2">How would you rate your experience?</p>
+                  <div class="star-rating">
+                    <i class="bi"
+                       *ngFor="let star of [1,2,3,4,5]"
+                       [class.bi-star-fill]="star <= (hoveredRating || rating)"
+                       [class.bi-star]="star > (hoveredRating || rating)"
+                       (mouseenter)="hoveredRating = star"
+                       (mouseleave)="hoveredRating = 0"
+                       (click)="setRating(star)">
+                    </i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- User Info -->
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input type="text"
+                         class="form-control bg-light"
+                         id="username"
+                         formControlName="username"
+                         placeholder="Username">
+                  <label for="username">Your Name</label>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input type="email"
+                         class="form-control bg-light"
+                         id="email"
+                         formControlName="email"
+                         placeholder="Email">
+                  <label for="email">Email Address</label>
+                </div>
+              </div>
+
+              <!-- Review Text -->
+              <div class="col-12">
+                <div class="form-floating">
+                  <textarea class="form-control bg-light"
+                            id="comment"
+                            formControlName="comment"
+                            placeholder="Your review"
+                            style="height: 120px"></textarea>
+                  <label for="comment">Share your thoughts</label>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="col-12 text-end">
+                <button type="button"
+                        class="btn btn-outline-secondary rounded-pill px-4 me-2"
+                        (click)="toggleReviewForm()">
+                  Cancel
+                </button>
+                <button type="submit"
+                        class="btn btn-primary rounded-pill px-4"
+                        [disabled]="reviewForm.invalid || !rating">
+                  <i class="bi bi-send me-2"></i>Submit Review
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews List -->
+    <div class="reviews-list">
+      <div class="row g-4">
+        <!-- Review Card -->
+        <div class="col-md-6" *ngFor="let review of reviews">
+          <div class="card h-100 border-0 shadow-sm rounded-4 review-card">
+            <div class="card-body p-4">
+              <!-- Review Header -->
+              <div class="d-flex align-items-center mb-3">
+                <div class="avatar-wrapper me-3">
+                  <div class="avatar rounded-circle bg-primary bg-opacity-10 text-primary">
+                    {{ review.username.charAt(0).toUpperCase() }}
+                  </div>
+                </div>
+                <div class="flex-grow-1">
+                  <h4 class="h6 mb-1">{{ review.username }}</h4>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="stars">
+                      <i class="bi bi-star-fill text-warning"
+                         *ngFor="let star of [].constructor(review.rating)"></i>
+                    </div>
+                    <span class="text-muted">•</span>
+                    <small class="text-muted">{{ review.date | date:'mediumDate' }}</small>
+                  </div>
+                </div>
+                <!-- Like Button -->
+                <button class="btn btn-like"
+                        [class.liked]="review.isLiked"
+                        (click)="likeReview(review.id)">
+                  <i class="bi" [class.bi-heart-fill]="review.isLiked" [class.bi-heart]="!review.isLiked"></i>
+                  <span class="ms-1">{{ review.likes }}</span>
+                </button>
+              </div>
+
+              <!-- Review Content -->
+              <p class="review-text mb-0">{{ review.comment }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Load More -->
+      <div class="text-center mt-5" *ngIf="hasMoreReviews">
+        <button class="btn btn-outline-primary btn-lg rounded-pill px-5"
+                (click)="loadMoreReviews()"
+                [disabled]="loadingMore">
+          <span *ngIf="!loadingMore">
+            <i class="bi bi-plus-circle me-2"></i>Show More Reviews
+          </span>
+          <span *ngIf="loadingMore" class="d-flex align-items-center justify-content-center gap-2">
+            <span class="spinner-border spinner-border-sm"></span>
+            Loading...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

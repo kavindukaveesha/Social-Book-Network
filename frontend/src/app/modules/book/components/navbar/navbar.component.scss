@@ -1,0 +1,92 @@
+/* navbar.component.scss */
+:host {
+  display: block;
+  height: 72px;
+}
+
+.navbar {
+  min-height: 72px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.nav-link {
+  color: #333;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: color 0.2s ease;
+
+  &:hover,
+  &.active {
+    color: var(--bs-primary);
+  }
+}
+
+.dropdown-menu {
+  margin-top: 0.5rem;
+  border-radius: 1rem;
+  padding: 0.75rem 0;
+
+  .dropdown-item {
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: var(--bs-primary);
+      color: white;
+    }
+  }
+}
+
+.btn-link {
+  color: #333;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--bs-primary);
+  }
+}
+
+.form-control {
+  border-radius: 50rem;
+
+  &:focus {
+    border-color: var(--bs-primary);
+    box-shadow: none;
+  }
+}
+
+.input-group {
+  .input-group-text {
+    border-radius: 50rem 0 0 50rem;
+    border-right: none;
+  }
+
+  .form-control {
+    border-radius: 0 50rem 50rem 0;
+    border-left: none;
+
+    &:focus {
+      border-color: #dee2e6;
+      box-shadow: none;
+    }
+  }
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    padding: 1rem 0;
+  }
+
+  .nav-item {
+    padding: 0.5rem 0;
+  }
+
+  .dropdown-menu {
+    border: none;
+    padding: 0.5rem 0;
+    margin-left: 1rem;
+    box-shadow: none;
+  }
+}
